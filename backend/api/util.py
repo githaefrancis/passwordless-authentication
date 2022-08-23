@@ -1,4 +1,8 @@
 import secrets,random,math
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
 
 def generate_magic_token():
     """
@@ -20,3 +24,20 @@ def generate_otp():
 
     return OTP
 
+
+def send_email(address):
+    message = Mail(
+        from_email='francizgithae@gmail.com',
+        to_emails=address,
+        subject='Login Link',
+        html_content='<strong>Hello. Please use the below Link to confirm your Login</strong>',
+        is_multiple=True)
+    print(os.environ.get('SENDGRID_API_KEY'))
+    try:
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(e.message)

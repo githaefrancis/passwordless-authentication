@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from users.models import User
 from .serializer import UserSerializer
 from rest_framework import status
-from .util import generate_magic_token,generate_otp
+from .util import generate_magic_token,generate_otp, send_email
 # Create your views here.
 
 class UserList(APIView):
@@ -37,8 +37,15 @@ class Login(APIView):
         except User.DoesNotExist:
             return Response({'Error':"Invalid username/password"},status="400")
 
-        print(generate_otp())
-        print(generate_magic_token())
+        token=generate_magic_token()
+        otp=generate_otp()
+        
+
+        user.token=token
+        user.OTP=otp
+        user.save()
+
+        send_email('francis.githae@quatrixglobal.com')
         return Response('user found')
         
 

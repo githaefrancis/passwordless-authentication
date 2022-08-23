@@ -7,11 +7,13 @@ from .serializer import UserSerializer
 from rest_framework import status
 from .util import generate_magic_token,generate_otp, send_email, send_sms
 # Create your views here.
-
+import jwt
+import os
 class JwtToken():
-    def generate_token():
-        pass
-
+    def generate_token(self,payload):
+        secret=os.environ.get('secret')
+        jwt_token={'token':jwt.encode(payload,secret)}
+        return jwt_token
     def verify_token():
         pass
 
@@ -57,5 +59,34 @@ class Login(APIView):
         # send_sms('+254711405235',otp)
         return Response('user found')
         
+class Authenticate(APIView):
+    def post(self,request,*args,**kwargs):
+        if not request.data:
+            return Response({'Error','please provide a token'},status="400")
+
+        token=request.data['token']
+        otp=request.data['otp']
+
+        if token:
+            try:
+                user=User(token=token)
+
+            except User.DoesNotExist:
+                return Response({'Error':"Invalid code"},status="400")
+
+
+        elif otp:
+            try:
+                user=User(OTP=otp)
+
+            except User.DoesNotExist:
+                return Response({'Error':"Invalid code"},status="400")
+
+        token=JwtToken.generate_token({id:user.id})
+
+        return Response({'token'},status='200')
+
+
+
 
         

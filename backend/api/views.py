@@ -5,8 +5,16 @@ from rest_framework.views import APIView
 from users.models import User
 from .serializer import UserSerializer
 from rest_framework import status
-from .util import generate_magic_token,generate_otp, send_email
+from .util import generate_magic_token,generate_otp, send_email, send_sms
 # Create your views here.
+
+class JwtToken():
+    def generate_token():
+        pass
+
+    def verify_token():
+        pass
+
 
 class UserList(APIView):
     def get(self,request,format=None):
@@ -45,7 +53,8 @@ class Login(APIView):
         user.OTP=otp
         user.save()
 
-        send_email('francis.githae@quatrixglobal.com')
+        # send_email('francis.githae@quatrixglobal.com')
+        # send_sms('+254711405235',otp)
         return Response('user found')
         
 

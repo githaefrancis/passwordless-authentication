@@ -2,6 +2,7 @@ import secrets,random,math
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+from twilio.rest import Client 
 
 
 def generate_magic_token():
@@ -41,3 +42,17 @@ def send_email(address):
         print(response.headers)
     except Exception as e:
         print(e.message)
+
+
+def send_sms(phone,OTP): 
+    account_sid = os.environ.get('TWILIO_SID') 
+    auth_token = os.environ.get('TWILIO_AUTH_TOKEN') 
+    client = Client(account_sid, auth_token) 
+    
+    message = client.messages.create(  
+                                messaging_service_sid='MG02dfafb9fbe5009055834f4c940c522d', 
+                                body="Your OTP is {}".format(OTP),      
+                                to='+254711405235' 
+                            ) 
+    
+    print(message.sid)

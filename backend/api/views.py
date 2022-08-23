@@ -22,3 +22,21 @@ class UserList(APIView):
             return Response(serializers.data, status=status.HTTP_201_CREATED)
 
         return HttpResponse(serializers)
+
+
+class Login(APIView):
+    def post(self,request,*args,**kwargs):
+        if not request.data:
+            return Response({'Error','please provide a valid email or phone'},status="400")
+
+        email=request.data['email']
+
+        try:
+            user=User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({'Error':"Invalid username/password"},status="400")
+
+        return Response('user found')
+        
+
+        

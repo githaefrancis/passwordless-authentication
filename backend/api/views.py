@@ -97,8 +97,8 @@ class Authenticate(APIView):
 
      
         jwt_token=JwtToken.generate_token({'id':user.id})
-        decoded_jwt=jwt.decode('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MX0.xJsYv31okFRtiYTYsm8sCUOYVDwXjlBVw2kCciJ7J0M',secret,algorithms=["HS256"])
-        print(decoded_jwt)
+        # decoded_jwt=jwt.decode('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MX0.xJsYv31okFRtiYTYsm8sCUOYVDwXjlBVw2kCciJ7J0M',secret,algorithms=["HS256"])
+        # print(decoded_jwt)
         return Response(jwt_token,status='200')
 
 

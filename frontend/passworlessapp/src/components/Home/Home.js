@@ -1,7 +1,21 @@
 import { Card } from "@mui/material";
-import React from "react";
-
+import React,{useEffect,useState} from "react";
+import axios from "../../utils/axios";
+import { Navigate } from "react-router-dom";
 const Home=()=>{
+    useEffect(()=>{
+        let url="api/home/"
+        axios
+            .get(url)
+            .then((res)=>{
+                
+            })
+            .catch(err=>{
+                
+                return <Navigate to="/login" replace />
+            }
+            );
+    },[])
     return(
         <div>
 

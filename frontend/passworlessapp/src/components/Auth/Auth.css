@@ -21,3 +21,14 @@
     align-items:center;
     margin-top: 5em;
 }
+.modal-section{
+    height: 20em;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2em;
+}
+.centered-text{
+    text-align: center;
+}

@@ -12,7 +12,10 @@ import {
   FormControlLabel,
   Radio,
   Card,
-  
+  Modal,
+  Box,
+  Typography
+
 } from "@mui/material";
 import "./Auth.css";
 import { useState } from "react";
@@ -21,12 +24,16 @@ const Login = () => {
   const [activeOption, setActiveOption] = useState("email");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [ errMsg,setErrMsg]=useState("");
-  let navigate=useNavigate()
+  const [errMsg, setErrMsg] = useState("");
+  const [modalStatus, setModal] = useState(false)
+  let navigate = useNavigate()
   const handleOptionChange = (e) => {
     setActiveOption(e.target.value);
     setErrMsg("")
   };
+  const handleClose = () => {
+    setModal(false)
+  }
   const validator = (identifier) => {
     if (activeOption === "email") {
       return identifier.match(
@@ -41,44 +48,45 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log('reached')
-    let validation ='';
+    let validation = '';
     let data;
     if (activeOption === 'email') {
-        if(!email.trim()){
-            setErrMsg("Email is required")
-            return
-        }
+      if (!email.trim()) {
+        setErrMsg("Email is required")
+        return
+      }
       validation = validator(email);
-      data={email}
-     
+      data = { email }
+
     } else if (activeOption === 'phone') {
-        if(!phone.trim()){
-            setErrMsg("Phone is required")
-            return
-        }
+      if (!phone.trim()) {
+        setErrMsg("Phone is required")
+        return
+      }
       validation = validator(phone);
-      data={phone}
+      data = { phone }
     } else {
       validation = '';
     }
 
     if (validation) {
-    let url='api/login/'
+      let url = 'api/login/'
       axios
-        .post(url,data)
-        .then(res=>{
+        .post(url, data)
+        .then(res => {
 
-            if(Object.keys(data)[0]==='email'){
-                console.log(`A magic link has been sent to your email`)
-            }
-            else{
-                console.log('An OTP has been sent to your phone')
-            }
-            navigate('/verify',{replace:true});
-            
+          if (Object.keys(data)[0] === 'email') {
+            console.log(`A magic link has been sent to your email`)
+          }
+          else {
+            console.log('An OTP has been sent to your phone')
+          }
+          navigate('/verify', { replace: true });
+
         })
-        .catch(err=>{
-            console.log("No account has been found,Would you like to create one?")
+        .catch(err => {
+          setModal(true)
+          console.log("No account has been found,Would you like to create one?")
         })
     }
   };
@@ -120,7 +128,7 @@ const Login = () => {
                     label="phone"
                   />
                 </RadioGroup>
-                <div style={{ color:'red'}}>{errMsg}</div>
+                <div style={{ color: 'red' }}>{errMsg}</div>
 
               </FormControl>
               {activeOption === "email" && (
@@ -131,7 +139,7 @@ const Login = () => {
                   variant="outlined"
                   margin="normal"
                   value={email}
-                  onChange={(e) => {setEmail(e.target.value);setErrMsg("")}}
+                  onChange={(e) => { setEmail(e.target.value); setErrMsg("") }}
                 />
               )}
               {activeOption === "phone" && (
@@ -142,7 +150,7 @@ const Login = () => {
                   variant="outlined"
                   margin="normal"
                   value={phone}
-                  onChange={(e) => {setPhone(e.target.value);setErrMsg("")}}
+                  onChange={(e) => { setPhone(e.target.value); setErrMsg("") }}
                 />
               )}
               <Button variant="contained" color="success" type="submit">
@@ -152,6 +160,29 @@ const Login = () => {
           </Card>
         </Grid>
       </Grid>
+
+      {/* register modal */}
+
+      <Modal
+        open={modalStatus}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        className="card-section "
+      >
+        <Box sx={10} >
+          <div className="modal-section">
+            <div className="centered-text">
+              <h3 >Account Does not exist</h3>
+              <h4>Would like to Create an account with this {activeOption}? </h4>
+              <label>{activeOption === "email" ? email : phone}</label>
+
+              <div style={{ display: "flex", justifyContent: "space-around", marginTop: "2em" }}><Button variant="contained" color="error" onClick={handleClose}>Cancel</Button>
+                <Button variant="contained" color="success">Create</Button></div>
+            </div>
+          </div>
+        </Box>
+      </Modal>
     </div>
   );
 };

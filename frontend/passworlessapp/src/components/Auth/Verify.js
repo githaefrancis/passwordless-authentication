@@ -2,11 +2,23 @@ import React,{useState} from "react";
 import OtpInput from "react-otp-input"
 import { Card,Grid,Button } from "@mui/material";
 import "./Auth.css"
+import axios from "../../utils/axios_no_auth";
 const Verify=()=>{
 
-const [otp,setOtp]=useState("2568")
+const [otp,setOtp]=useState("")
 const handleSubmit=()=>{
+    let url="/api/verify/"
+    let data={otp}
     console.log(otp)
+    axios
+        .post(url,data)
+        .then((res)=>{
+            console.log(res.data.token)
+            localStorage.setItem('jwt',JSON.stringify(res.data.token))
+        })
+        .catch((err)=>{
+            console.log("Wrong code")
+        })
     setOtp("")
 }
 return(

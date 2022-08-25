@@ -1,10 +1,10 @@
 import axios from "axios";
-const url = process.env.BACKEND_URL;
+const url = "http://localhost:7500";
 
 axios.defaults.baseURL = url;
 
 axios.interceptors.request.use((request) => {
-  const token = localStorage.getItem("jwtToken");
+  const token = localStorage.getItem("jwt");
 
   request.headers.Authorization = "Token " + token;
 

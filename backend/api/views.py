@@ -105,4 +105,5 @@ class Authenticate(APIView):
 class Home(APIView):
     permission_classes=(IsAuthenticated,)
     def get(self,request,*args,**kwargs):
+        print(request.user)
         return Response('Response')

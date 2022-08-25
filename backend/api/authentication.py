@@ -7,13 +7,13 @@ from users.models import User
 
 class JWTAuthentication(authentication.BaseAuthentication):
     authentication_header_prefix='Token'
-
+    print("Process started")
     def authenticate(self,request):
         request.user=None
 
         authorization_header=authentication.get_authorization_header(request).split()
         auth_header_prefix=self.authentication_header_prefix.lower()
-
+        print(authorization_header)
         if not authorization_header:
             return None
 
@@ -30,7 +30,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
             return None
 
         
-        return self._authenticate_token(self,request,token)
+        return self._authenticate_token(request,token)
 
     def _authenticate_token(self,request,token):
         try:

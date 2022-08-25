@@ -1,10 +1,23 @@
 .hero{
-    background-color:green;
-    height:100vh
+    background-color:rgb(174, 194, 174);
+    height:40vh;
+    border-radius:0.5em;
+    margin:auto
 }
 
 .card-section{
     display:flex;
     justify-content:center;
     align-items:center;
+}
+.pic-card{
+    width: 20rem;
+    height: 20rem;
+}
+
+.card-tray{
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    margin-top: 5em;
 }

@@ -1,9 +1,14 @@
-import React from "react";
+import React,{useState} from "react";
 import OtpInput from "react-otp-input"
 import { Card,Grid,Button } from "@mui/material";
 import "./Auth.css"
 const Verify=()=>{
 
+const [otp,setOtp]=useState("2568")
+const handleSubmit=()=>{
+    console.log(otp)
+    setOtp("")
+}
 return(
 <div className="card-section">
 <Grid container>
@@ -34,13 +39,15 @@ return(
                   borderRadius: 4,
                   border: "1px solid green"
                 }}
+                value={otp}
+                onChange={(otp)=>setOtp(otp)}
               />
             </Grid>
 
            
             </div>
             <div style={{marginTop:"2em"}}>
-            <Button variant="contained" color="success" type="submit">
+            <Button variant="contained" color="success" onClick={handleSubmit}>
                 Submit
               </Button>
             </div>

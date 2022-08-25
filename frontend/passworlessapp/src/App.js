@@ -7,7 +7,7 @@ import Verify from './components/Auth/Verify';
 function App() {
   return (
     <div className="App">
-      {/* <Login /> */}
+   
       <Routes>
         <Route path="/verify" element={<Verify />} />
         <Route path="/home" element={<Home />} />

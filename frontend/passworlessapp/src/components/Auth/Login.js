@@ -16,11 +16,13 @@ import {
 } from "@mui/material";
 import "./Auth.css";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [activeOption, setActiveOption] = useState("email");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [ errMsg,setErrMsg]=useState("");
+  let navigate=useNavigate()
   const handleOptionChange = (e) => {
     setActiveOption(e.target.value);
     setErrMsg("")
@@ -72,6 +74,7 @@ const Login = () => {
             else{
                 console.log('An OTP has been sent to your phone')
             }
+            navigate('/verify',{replace:true});
             
         })
         .catch(err=>{
@@ -86,15 +89,14 @@ const Login = () => {
           item
           xs={12}
           style={{ marginTop: "10EM" }}
-          className="login-section"
+          className="card-section"
         >
           <Card variant="outlined" color="success" style={{ margin: "1em" }}>
             <h1>Passwordless Authentication</h1>
 
             <h2>Sign In</h2>
             <form
-              margin="normal"
-              style={{ padding: "4em" }}
+              style={{ padding: "2em" }}
               onSubmit={handleSubmit}
             >
 
@@ -150,7 +152,6 @@ const Login = () => {
           </Card>
         </Grid>
       </Grid>
-      {/* <Button variant="contained">Contained</Button> */}
     </div>
   );
 };

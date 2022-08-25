@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "../../utils/axios_no_auth"
 import {
   Button,
   Grid,
@@ -11,6 +12,7 @@ import {
   FormControlLabel,
   Radio,
   Card,
+  
 } from "@mui/material";
 import "./Auth.css";
 import { useState } from "react";
@@ -18,8 +20,10 @@ const Login = () => {
   const [activeOption, setActiveOption] = useState("email");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [ errMsg,setErrMsg]=useState("");
   const handleOptionChange = (e) => {
     setActiveOption(e.target.value);
+    setErrMsg("")
   };
   const validator = (identifier) => {
     if (activeOption === "email") {
@@ -36,18 +40,43 @@ const Login = () => {
     e.preventDefault()
     console.log('reached')
     let validation ='';
+    let data;
     if (activeOption === 'email') {
+        if(!email.trim()){
+            setErrMsg("Email is required")
+            return
+        }
       validation = validator(email);
+      data={email}
      
     } else if (activeOption === 'phone') {
-        console.log('now phoning')
+        if(!phone.trim()){
+            setErrMsg("Phone is required")
+            return
+        }
       validation = validator(phone);
+      data={phone}
     } else {
       validation = '';
     }
 
     if (validation) {
-      console.log("passed");
+    let url='api/login/'
+      axios
+        .post(url,data)
+        .then(res=>{
+
+            if(Object.keys(data)[0]==='email'){
+                console.log(`A magic link has been sent to your email`)
+            }
+            else{
+                console.log('An OTP has been sent to your phone')
+            }
+            
+        })
+        .catch(err=>{
+            console.log("No account has been found,Would you like to create one?")
+        })
     }
   };
   return (
@@ -68,10 +97,12 @@ const Login = () => {
               style={{ padding: "4em" }}
               onSubmit={handleSubmit}
             >
+
               <FormControl>
                 <RadioGroup
                   aria-labelledby="login-option"
                   defaultValue="email"
+                  name="opt"
                   row
                   value={activeOption}
                   onChange={handleOptionChange}
@@ -87,6 +118,8 @@ const Login = () => {
                     label="phone"
                   />
                 </RadioGroup>
+                <div style={{ color:'red'}}>{errMsg}</div>
+
               </FormControl>
               {activeOption === "email" && (
                 <TextField
@@ -96,18 +129,18 @@ const Login = () => {
                   variant="outlined"
                   margin="normal"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {setEmail(e.target.value);setErrMsg("")}}
                 />
               )}
               {activeOption === "phone" && (
                 <TextField
                   fullWidth
                   id="phone"
-                  label="Phone"
+                  label="Phone +254"
                   variant="outlined"
                   margin="normal"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => {setPhone(e.target.value);setErrMsg("")}}
                 />
               )}
               <Button variant="contained" color="success" type="submit">

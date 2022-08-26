@@ -26,12 +26,12 @@ def generate_otp():
     return OTP
 
 
-def send_email(address):
+def send_email(address,token):
     message = Mail(
         from_email='francizgithae@gmail.com',
         to_emails=address,
         subject='Login Link',
-        html_content='<strong>Hello. Please use the below Link to confirm your Login</strong>',
+        html_content='<p>Hello. Please use the below Link to confirm your Login <br> <a href="http://localhost:3000/verify?token={}"><button>Click To Verify<button></a></p>'.format(token),
         is_multiple=True)
     print(os.environ.get('SENDGRID_API_KEY'))
     try:

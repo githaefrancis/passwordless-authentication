@@ -66,9 +66,9 @@ class Login(APIView):
         user.OTP=otp
         user.save()
         if user.email:
-            send_email(user.email)
+            send_email(user.email,token)
         if user.phone:
-            send_sms(user.phone)
+            send_sms(user.phone,otp)
         
         print(token,otp)
         return Response('user found')
@@ -106,6 +106,8 @@ class Authenticate(APIView):
 
      
         jwt_token=JwtToken.generate_token({'id':user.id})
+        user.token=None
+        user.OTP=None
         return Response(jwt_token,status='200')
 
 

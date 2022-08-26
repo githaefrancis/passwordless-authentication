@@ -43,10 +43,8 @@ source virtual/bin/ activate
 ```bash
 pip install -r requirements.txt
 ```
-5. Create database
 
-
-6. Create .env file
+5. Create .env file
 
 ```bash
 export SENDGRID_API_KEY=<>
@@ -58,7 +56,7 @@ export TWILIO_AUTH_TOKEN=<>
 export secret=<>
 ```
 
-7. Load .env
+6. Load .env
 
 ```bash 
 source .env
@@ -69,13 +67,8 @@ source .env
 ```
 python3 manage.py migrate
 ```
-9. Run tests
 
-```
-python3 manage.py test
-```
-
-10. Run the app
+9. Run the app
 
 ```
 python3 manage.py runserver

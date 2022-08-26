@@ -6,7 +6,7 @@ axios.defaults.baseURL = url;
 axios.interceptors.request.use((request) => {
   const token = localStorage.getItem("jwt");
 
-  request.headers.Authorization = "Token " + token;
+  request.headers.Authorization = `Token ${token}`;
 
   return request;
 });

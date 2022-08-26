@@ -3,9 +3,11 @@ import OtpInput from "react-otp-input"
 import { Card,Grid,Button } from "@mui/material";
 import "./Auth.css"
 import axios from "../../utils/axios_no_auth";
+import { useNavigate } from "react-router-dom";
 const Verify=()=>{
 
 const [otp,setOtp]=useState("")
+const navigate=useNavigate()
 const handleSubmit=()=>{
     let url="/api/verify/"
     let data={otp}
@@ -14,7 +16,9 @@ const handleSubmit=()=>{
         .post(url,data)
         .then((res)=>{
             console.log(res.data.token)
-            localStorage.setItem('jwt',JSON.stringify(res.data.token))
+            localStorage.setItem('jwt',res.data.token)
+            navigate('/home', { replace: true });
+
         })
         .catch((err)=>{
             console.log("Wrong code")
@@ -32,7 +36,7 @@ return(
         >
           <Card variant="outlined" color="success" style={{ margin: "1em",padding:"2em" }}>
             <h1>Passwordless Authentication</h1>
-
+            <p>An OTP has been sent to your phone and a link to your email</p>
             <h2>Enter OTP</h2>
             <div className="card-section">
         <Grid item  justify="center">

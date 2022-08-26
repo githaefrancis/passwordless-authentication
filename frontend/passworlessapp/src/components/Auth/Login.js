@@ -14,7 +14,7 @@ import {
   Card,
   Modal,
   Box,
-  Typography
+
 
 } from "@mui/material";
 import "./Auth.css";
@@ -33,6 +33,47 @@ const Login = () => {
   };
   const handleClose = () => {
     setModal(false)
+  }
+  const handleCreate=()=>{
+    let url="api/register/"
+    let data=activeOption==="email" ? {email} : {phone}
+    axios
+    .post(url, data)
+    .then(res => {
+      if (Object.keys(data)[0] === 'email') {
+        console.log(`A magic link has been sent to your email`)
+      }
+      else {
+        console.log('An OTP has been sent to your phone')
+      }
+
+      let loginUrl = 'api/login/'
+      axios
+        .post(loginUrl, data)
+        .then(res => {
+
+          if (Object.keys(data)[0] === 'email') {
+            console.log(`A magic link has been sent to your email`)
+          }
+          else {
+            console.log('An OTP has been sent to your phone')
+          }
+          navigate('/verify', { replace: true });
+
+        })
+        .catch(err => {
+          setModal(true)
+          console.log("No account has been found,Would you like to create one?")
+        })
+      setModal(false)
+      
+    
+
+
+    })
+    .catch(err => {
+      console.log("Account creation failed")
+    })
   }
   const validator = (identifier) => {
     if (activeOption === "email") {
@@ -170,7 +211,7 @@ const Login = () => {
         aria-describedby="modal-modal-description"
         className="card-section "
       >
-        <Box sx={10} >
+        <Box xs={10} >
           <div className="modal-section">
             <div className="centered-text">
               <h3 >Account Does not exist</h3>
@@ -178,7 +219,7 @@ const Login = () => {
               <label>{activeOption === "email" ? email : phone}</label>
 
               <div style={{ display: "flex", justifyContent: "space-around", marginTop: "2em" }}><Button variant="contained" color="error" onClick={handleClose}>Cancel</Button>
-                <Button variant="contained" color="success">Create</Button></div>
+                <Button variant="contained" color="success" onClick={handleCreate}>Create</Button></div>
             </div>
           </div>
         </Box>

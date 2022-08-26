@@ -3,19 +3,22 @@ import OtpInput from "react-otp-input"
 import { Card,Grid,Button } from "@mui/material";
 import "./Auth.css"
 import axios from "../../utils/axios_no_auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useSearchParams } from "react-router-dom";
 const Verify=()=>{
 
 const [otp,setOtp]=useState("")
 const navigate=useNavigate()
+const [searchParams, setSearchParams] = useSearchParams();
+
+const magic_token=searchParams.get('token');
 const handleSubmit=()=>{
     let url="/api/verify/"
     let data={otp}
-    console.log(otp)
+
     axios
         .post(url,data)
         .then((res)=>{
-            console.log(res.data.token)
+        
             localStorage.setItem('jwt',res.data.token)
             navigate('/home', { replace: true });
 
@@ -24,6 +27,24 @@ const handleSubmit=()=>{
             console.log("Wrong code")
         })
     setOtp("")
+}
+
+if(magic_token){
+
+    let url="/api/verify/"
+    let data={'token':magic_token}
+ 
+    axios
+        .post(url,data)
+        .then((res)=>{
+        
+            localStorage.setItem('jwt',res.data.token)
+            navigate('/home', { replace: true });
+
+        })
+        .catch((err)=>{
+            console.log("Wrong code")
+        })
 }
 return(
 <div className="card-section">

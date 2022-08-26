@@ -4,5 +4,5 @@ urlpatterns = [
     path('login/',Login.as_view()),
     path('verify/',Authenticate.as_view()),
     path('home/',Home.as_view()),
-    path('',UserList.as_view())
+    path('register/',UserList.as_view())
 ]

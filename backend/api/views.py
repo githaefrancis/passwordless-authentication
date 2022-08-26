@@ -28,12 +28,12 @@ class UserList(APIView):
         serializers=UserSerializer(all_users,many=True)
         return Response(serializers.data)
 
-    def post(self,request,format=None):
+    def post(self,request,*args,**kwargs):
         serializers=UserSerializer(data=request.data)
         print(request.data)
         if serializers.is_valid():
             serializers.save()
-            print('here')
+
             return Response(serializers.data, status=status.HTTP_201_CREATED)
 
         return HttpResponse(serializers)
@@ -44,12 +44,19 @@ class Login(APIView):
         if not request.data:
             return Response({'Error','please provide a valid email or phone'},status="400")
 
-        email=request.data['email']
+        if 'email' in request.data:
+            email=request.data['email']
+            try:
+                user=User.objects.get(email=email)
+            except User.DoesNotExist:
+                return Response({'Error':"Invalid username/password"},status="400")
 
-        try:
-            user=User.objects.get(email=email)
-        except User.DoesNotExist:
-            return Response({'Error':"Invalid username/password"},status="400")
+        elif 'phone' in request.data:
+            phone=request.data['phone']
+            try:
+               user=User.objects.get(phone=phone,email=None)
+            except User.DoesNotExist:
+                return Response({'Error':"Invalid username/password"},status="400")
 
         token=generate_magic_token()
         otp=generate_otp()
@@ -58,9 +65,11 @@ class Login(APIView):
         user.token=token
         user.OTP=otp
         user.save()
-
-        # send_email('francis.githae@quatrixglobal.com')
-        # send_sms('+254711405235',otp)
+        if user.email:
+            send_email(user.email)
+        if user.phone:
+            send_sms(user.phone)
+        
         print(token,otp)
         return Response('user found')
         
@@ -97,8 +106,6 @@ class Authenticate(APIView):
 
      
         jwt_token=JwtToken.generate_token({'id':user.id})
-        # decoded_jwt=jwt.decode('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MX0.xJsYv31okFRtiYTYsm8sCUOYVDwXjlBVw2kCciJ7J0M',secret,algorithms=["HS256"])
-        # print(decoded_jwt)
         return Response(jwt_token,status='200')
 
 

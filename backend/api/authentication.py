@@ -38,7 +38,8 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
         except:
             msg="Invalid token"
-            raise exceptions.AuthenticationFailed(msg)
+            return None
+            # raise exceptions.AuthenticationFailed(msg)
 
         
         try:
@@ -46,7 +47,8 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
         except User.DoesNotExist:
             msg = 'User Not found'
+            return None
 
-            raise exceptions.AuthenticationFailed(msg)
+            # raise exceptions.AuthenticationFailed(msg)
 
         return (user,token)

@@ -106,9 +106,7 @@ REST_FRAMEWORK={
     'DEFAULT_AUTHENTICATION_CLASSES':[
         'api.authentication.JWTAuthentication'
     ],
-    # 'DEFAULT_PERMISSION_CLASSES':(
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ),
+ 
     }
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
